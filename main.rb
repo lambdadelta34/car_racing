@@ -5,28 +5,42 @@ require 'json'
 require 'stringio'
 
 #
-# Complete the 'minimum_movement' function below.
+# Complete the 'minimumMovement' function below.
 #
 # The function is expected to return an INTEGER.
-# The function accepts INTEGER_ARRAY obstacle_lanes as parameter.
+# The function accepts INTEGER_ARRAY obstacleLanes as parameter.
 #
 
-def minimum_movement(obstacle_lanes)
-  # Write your code here
+def minimumMovement(obstacleLanes)
+  car_lane = 2
+  turns = 0
+  last_obstacle_lane = 0
+  obstacleLanes.each do |next_obstacle_lane|
+    if car_lane.zero? && next_obstacle_lane != last_obstacle_lane
+      car_lane = ([1, 2, 3] - [last_obstacle_lane, next_obstacle_lane]).first
+      last_obstacle_lane = next_obstacle_lane
+    end
+    next unless car_lane == next_obstacle_lane
+
+    turns += 1
+    last_obstacle_lane = next_obstacle_lane
+    car_lane = 0
+  end
+  turns
 end
 
 fptr = File.open(ENV['OUTPUT_PATH'], 'w')
 
-obstacle_lanes_count = gets.strip.to_i
+obstacleLanes_count = gets.strip.to_i
 
-obstacle_lanes = Array.new(obstacle_lanes_count)
+obstacleLanes = Array.new(obstacleLanes_count)
 
-obstacle_lanes_count.times do |i|
-  obstacle_lanes_item = gets.strip.to_i
-  obstacle_lanes[i] = obstacle_lanes_item
+obstacleLanes_count.times do |i|
+  obstacleLanes_item = gets.strip.to_i
+  obstacleLanes[i] = obstacleLanes_item
 end
 
-result = minimum_movement(obstacle_lanes)
+result = minimumMovement obstacleLanes
 
 fptr.write result
 fptr.write "\n"
